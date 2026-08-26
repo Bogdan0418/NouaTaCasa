@@ -30,4 +30,14 @@ public class PropertyController {
                 .map(property -> org.springframework.http.ResponseEntity.ok(property))
                 .orElse(org.springframework.http.ResponseEntity.notFound().build());
     }
+
+    @PostMapping
+    public org.springframework.http.ResponseEntity<Property> createProperty(@RequestBody Property property) {
+        Property savedProperty = propertyService.createProperty(property);
+
+        // Returnăm codul 201 (CREATED) împreună cu proprietatea nou salvată (care are acum și ID generat)
+        return org.springframework.http.ResponseEntity
+                .status(org.springframework.http.HttpStatus.CREATED)
+                .body(savedProperty);
+    }
 }

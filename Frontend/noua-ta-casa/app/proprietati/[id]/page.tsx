@@ -6,7 +6,7 @@ import { Property } from "../../../types/property";
 async function getProperty(id: string): Promise<Property | null> {
   try {
     const res = await fetch(`http://localhost:8080/api/properties/${id}`, {
-      cache: "no-store", // La un marketplace, vrem date proaspete mereu
+      cache: "no-store", 
     });
 
     if (!res.ok) return null;
@@ -17,16 +17,14 @@ async function getProperty(id: string): Promise<Property | null> {
   }
 }
 
-// Observă noul tip pentru params: Promise<{ id: string }>
+// Parametrii ca Promise (pentru Next.js 16+)
 export default async function PropertyDetailsPage({ 
   params 
 }: { 
   params: Promise<{ id: string }> 
 }) {
-  // Despachetăm promisiunea pentru a extrage ID-ul din URL
+  // Despachetăm promisiunea pentru a extrage ID-ul
   const resolvedParams = await params;
-  
-  // Apelăm API-ul de Spring Boot cu ID-ul obținut
   const property = await getProperty(resolvedParams.id);
 
   if (!property) {
@@ -47,13 +45,23 @@ export default async function PropertyDetailsPage({
       </Link>
 
       <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100">
-        {/* Imaginea principală (Hero) */}
-        <div className="w-full h-[400px] md:h-[500px] relative bg-gray-200">
-          <img
-            src={property.imageUrl}
-            alt={property.title}
-            className="w-full h-full object-cover"
-          />
+        
+        {/* Imaginea principală (Hero) cu verificare pentru URL gol */}
+        <div className="w-full h-[400px] md:h-[500px] relative bg-gray-100 flex items-center justify-center">
+          {property.imageUrl ? (
+            <img
+              src={property.imageUrl}
+              alt={property.title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+             <div className="flex flex-col items-center text-gray-400">
+               <svg className="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+               </svg>
+               <span className="text-lg font-medium">Nicio imagine disponibilă</span>
+             </div>
+          )}
           <div className="absolute top-6 left-6 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full text-sm font-bold text-gray-800 uppercase tracking-wider shadow-sm">
             {property.type}
           </div>

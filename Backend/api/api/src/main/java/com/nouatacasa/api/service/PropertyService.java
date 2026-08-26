@@ -26,4 +26,8 @@ public class PropertyService {
     public java.util.Optional<Property> getPropertyById(String id) {
         return propertyRepository.findById(id);
     }
+
+    public Property createProperty(Property property) {
+        return propertyRepository.save(property);
+    }
 }
