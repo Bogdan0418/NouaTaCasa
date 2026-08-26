@@ -23,4 +23,11 @@ public class PropertyController {
 
         return propertyService.searchProperties(type, rooms, maxPrice);
     }
+
+    @GetMapping("/{id}")
+    public org.springframework.http.ResponseEntity<Property> getPropertyById(@PathVariable String id) {
+        return propertyService.getPropertyById(id)
+                .map(property -> org.springframework.http.ResponseEntity.ok(property))
+                .orElse(org.springframework.http.ResponseEntity.notFound().build());
+    }
 }

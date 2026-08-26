@@ -22,4 +22,8 @@ public class PropertyService {
         // Executăm query-ul în baza de date
         return propertyRepository.findAll(spec);
     }
+
+    public java.util.Optional<Property> getPropertyById(String id) {
+        return propertyRepository.findById(id);
+    }
 }
